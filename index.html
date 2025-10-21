@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceMark - Reconocimiento Facial con Landmarks</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 FaceMark: Reconocimiento por Landmarks Faciales</h1>
+            <div class="privacy-notice">
+                ⚠️ <strong>Privacidad garantizada:</strong> No almacenamos imágenes, solo vectores de puntos (landmarks) en tu navegador. 
+                Los datos nunca se envían a ningún servidor.
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Columna izquierda: Cámara y video -->
+            <div class="video-section">
+                <div class="video-container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="canvas"></canvas>
+                </div>
+                <div class="status-bar">
+                    <span id="fps-display">FPS: --</span>
+                    <span id="inference-time">Tiempo: -- ms</span>
+                    <span id="capture-progress"></span>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Controles -->
+            <div class="controls-section">
+                <!-- Registro de alumnos -->
+                <div class="panel">
+                    <h2>📝 Registro de Alumnos</h2>
+                    <div class="form-group">
+                        <label for="student-name">Nombre del alumno:</label>
+                        <input type="text" id="student-name" placeholder="Ej: Juan Pérez">
+                    </div>
+                    <button id="btn-capture" class="btn btn-primary">
+                        📸 Capturar 3 segundos
+                    </button>
+                    <p class="help-text">
+                        Captura ~45 frames de landmarks durante 3 segundos para crear el prototipo del alumno.
+                    </p>
+                </div>
+
+                <!-- Configuración -->
+                <div class="panel">
+                    <h2>⚙️ Configuración k-NN</h2>
+                    <div class="form-group">
+                        <label for="k-value">Valor de k: <span id="k-display">3</span></label>
+                        <input type="range" id="k-value" min="1" max="10" value="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="threshold">Umbral τ: <span id="threshold-display">3.0</span></label>
+                        <input type="range" id="threshold" min="0.5" max="8.0" step="0.1" value="3.0">
+                        <p class="help-text-small">Si la distancia mínima supera τ, predice "Desconocido"</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="distance-metric">Métrica de distancia:</label>
+                        <select id="distance-metric">
+                            <option value="euclidean" selected>Euclídea (L2)</option>
+                            <option value="cosine">Coseno (similaridad)</option>
+                        </select>
+                        <p class="help-text-small">
+                            <strong>Euclídea:</strong> Mide distancia punto a punto (mejor para geometría facial).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Predicción -->
+                <div class="panel">
+                    <h2>🔍 Predicción en Vivo</h2>
+                    <button id="btn-predict" class="btn btn-secondary">
+                        ▶️ Iniciar Predicción
+                    </button>
+                    <div id="prediction-result" class="prediction-box">
+                        <div class="prediction-name">--</div>
+                        <div class="prediction-distance">Distancia: --</div>
+                    </div>
+                </div>
+
+                <!-- Lista de alumnos -->
+                <div class="panel">
+                    <h2>👥 Alumnos Registrados (<span id="student-count">0</span>)</h2>
+                    <ul id="student-list" class="student-list"></ul>
+                </div>
+
+                <!-- Gestión de datos -->
+                <div class="panel">
+                    <h2>💾 Gestión de Datos</h2>
+                    <div class="button-group">
+                        <button id="btn-export" class="btn btn-small">📤 Exportar JSON</button>
+                        <label for="file-import" class="btn btn-small">📥 Importar JSON</label>
+                        <input type="file" id="file-import" accept=".json" style="display: none;">
+                        <button id="btn-clear" class="btn btn-small btn-danger">🗑️ Borrar Todo</button>
+                    </div>
+                </div>
+
+                <!-- Log de eventos -->
+                <div class="panel">
+                    <h2>📋 Log de Eventos</h2>
+                    <div id="event-log" class="event-log"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MediaPipe desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    
+    <!-- Aplicación principal -->
+    <script src="app.js"></script>
+</body>
+</html>

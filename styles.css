@@ -1,5 +1,3 @@
-/* FACEMARK - DISEÑO PROFESIONAL UX/UI */
-
 :root {
     --primary-500: #667eea;
     --primary-600: #5568d3;
@@ -8,6 +6,7 @@
     --secondary-600: #38a169;
     --danger-500: #f56565;
     --danger-600: #e53e3e;
+    
     --gray-50: #f7fafc;
     --gray-100: #edf2f7;
     --gray-200: #e2e8f0;
@@ -32,6 +31,12 @@
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --zone-eyes: #43C6E3;
+    --zone-nose: #FFB347;
+    --zone-mouth: #FF5E7E;
+    --zone-eyebrows: #8D5EFF;
+    --zone-contour: #222222;
 }
 
 * {
@@ -87,7 +92,6 @@ header h1 {
     letter-spacing: -0.5px;
 }
 
-/* ===== SELECTOR DE MODO ===== */
 .mode-selector {
     display: flex;
     gap: 8px;
@@ -121,7 +125,6 @@ header h1 {
     box-shadow: var(--shadow-sm);
 }
 
-/* ===== CONTROL DE VISIBILIDAD POR MODO ===== */
 .mode-capture-only,
 .mode-inference-only {
     display: none;
@@ -155,7 +158,6 @@ body.mode-inference .mode-inference-only {
     padding-right: 4px;
 }
 
-/* Custom scrollbar para video-section */
 .video-section::-webkit-scrollbar {
     width: 6px;
 }
@@ -202,7 +204,6 @@ body.mode-inference .mode-inference-only {
     pointer-events: none;
 }
 
-/* ===== MÉTRICAS SUPERPUESTAS EN VIDEO ===== */
 .video-metrics {
     position: absolute;
     top: 12px;
@@ -266,7 +267,6 @@ body.mode-inference .mode-inference-only {
     padding-right: 4px;
 }
 
-/* Custom scrollbar para controls-section */
 .controls-section::-webkit-scrollbar {
     width: 6px;
 }
@@ -310,7 +310,6 @@ body.mode-inference .mode-inference-only {
     border-bottom: 2px solid var(--primary-500);
 }
 
-/* ===== PANELES COMPACTOS ===== */
 .panel-compact {
     padding: 8px 10px;
 }
@@ -321,7 +320,6 @@ body.mode-inference .mode-inference-only {
     padding-bottom: 4px;
 }
 
-/* ===== CONFIGURACIÓN K-NN COMPACTA ===== */
 .knn-config-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -562,7 +560,6 @@ body.mode-inference .mode-inference-only {
     background: linear-gradient(135deg, white 0%, var(--gray-50) 100%);
 }
 
-/* ===== LAYOUT DOS COLUMNAS PARA ZONAS FACIALES ===== */
 .zones-two-column {
     display: grid;
     grid-template-columns: 200px 1fr;
@@ -594,11 +591,10 @@ body.mode-inference .mode-inference-only {
     stroke-width: 2;
 }
 
-/* Contorno */
 .zone-contour {
-    fill: #222222;
+    fill: var(--zone-contour);
     fill-opacity: 0.08;
-    stroke: #222222;
+    stroke: var(--zone-contour);
     stroke-opacity: 0.3;
 }
 
@@ -614,11 +610,10 @@ body.mode-inference .mode-inference-only {
     filter: drop-shadow(0 0 6px rgba(34, 34, 34, 0.8));
 }
 
-/* Ojos */
 .zone-eyes {
-    fill: #43C6E3;
+    fill: var(--zone-eyes);
     fill-opacity: 0.2;
-    stroke: #43C6E3;
+    stroke: var(--zone-eyes);
     stroke-opacity: 0.4;
 }
 
@@ -634,11 +629,10 @@ body.mode-inference .mode-inference-only {
     filter: drop-shadow(0 0 8px rgba(67, 198, 227, 0.8));
 }
 
-/* Nariz */
 .zone-nose {
-    fill: #FFB347;
+    fill: var(--zone-nose);
     fill-opacity: 0.2;
-    stroke: #FFB347;
+    stroke: var(--zone-nose);
     stroke-opacity: 0.4;
 }
 
@@ -654,11 +648,10 @@ body.mode-inference .mode-inference-only {
     filter: drop-shadow(0 0 8px rgba(255, 179, 71, 0.8));
 }
 
-/* Boca */
 .zone-mouth {
-    fill: #FF5E7E;
+    fill: var(--zone-mouth);
     fill-opacity: 0.2;
-    stroke: #FF5E7E;
+    stroke: var(--zone-mouth);
     stroke-opacity: 0.4;
 }
 
@@ -674,10 +667,9 @@ body.mode-inference .mode-inference-only {
     filter: drop-shadow(0 0 8px rgba(255, 94, 126, 0.8));
 }
 
-/* Cejas */
 .zone-eyebrows {
     fill: none;
-    stroke: #8D5EFF;
+    stroke: var(--zone-eyebrows);
     stroke-opacity: 0.4;
     stroke-width: 3;
     stroke-linecap: round;
@@ -936,11 +928,7 @@ body.mode-inference .mode-inference-only {
 .panel:nth-child(5) { animation-delay: 0.25s; }
 .panel:nth-child(6) { animation-delay: 0.3s; }
 
-/* Responsive Design */
-
-/* ===== OPTIMIZACIÓN ESPECIAL PARA 1366x768 AL 75% (≈1024px efectivo) ===== */
 @media (max-width: 1440px) {
-    /* Reducir padding general */
     body {
         padding: 6px;
     }
@@ -949,7 +937,6 @@ body.mode-inference .mode-inference-only {
         border-radius: var(--radius-lg);
     }
     
-    /* Header más compacto */
     header {
         padding: 8px 14px;
     }
@@ -964,14 +951,12 @@ body.mode-inference .mode-inference-only {
         padding: 6px 10px;
     }
     
-    /* Área principal más compacta */
     .main-content {
         max-height: calc(100vh - 85px);
         gap: 8px;
         padding: 8px;
     }
     
-    /* Paneles más compactos */
     .panel {
         padding: 8px 10px;
         margin-bottom: 0;
@@ -992,7 +977,6 @@ body.mode-inference .mode-inference-only {
         margin-bottom: 5px;
     }
     
-    /* Panel de predicción más compacto */
     .panel-prediction-top {
         padding: 8px 10px;
     }
@@ -1015,7 +999,6 @@ body.mode-inference .mode-inference-only {
         font-size: 10px;
     }
     
-    /* Formularios más compactos */
     .form-group {
         margin-bottom: 6px;
     }
@@ -1030,7 +1013,6 @@ body.mode-inference .mode-inference-only {
         font-size: 11px;
     }
     
-    /* Botones más pequeños */
     .btn {
         padding: 6px 10px;
         font-size: 11px;
@@ -1041,7 +1023,6 @@ body.mode-inference .mode-inference-only {
         font-size: 10px;
     }
     
-    /* Textos de ayuda */
     .help-text {
         font-size: 10px;
         margin-top: 4px;
@@ -1052,12 +1033,10 @@ body.mode-inference .mode-inference-only {
         margin-top: 3px;
     }
     
-    /* Video container */
     .video-container {
         border-width: 2px;
     }
     
-    /* Métricas de video más pequeñas */
     .video-metrics {
         top: 6px;
         right: 6px;
@@ -1083,7 +1062,6 @@ body.mode-inference .mode-inference-only {
         padding: 6px;
     }
     
-    /* Configuración K-NN más compacta */
     .knn-config-grid {
         gap: 6px;
     }
@@ -1112,7 +1090,6 @@ body.mode-inference .mode-inference-only {
         min-width: 22px;
     }
     
-    /* Zonas faciales - layout más compacto */
     .panel-zones {
         padding: 6px 8px;
     }
@@ -1135,7 +1112,6 @@ body.mode-inference .mode-inference-only {
         font-size: 9px;
     }
     
-    /* Controles de peso más compactos */
     .zone-weights {
         gap: 4px;
     }
@@ -1168,7 +1144,6 @@ body.mode-inference .mode-inference-only {
         height: 14px;
     }
     
-    /* Lista de estudiantes */
     .student-list {
         max-height: 140px;
     }
@@ -1191,12 +1166,10 @@ body.mode-inference .mode-inference-only {
         font-size: 10px;
     }
     
-    /* Botones en grupo */
     .button-group {
         gap: 6px;
     }
     
-    /* Privacy notice */
     .privacy-notice {
         padding: 10px 14px;
         font-size: 10px;

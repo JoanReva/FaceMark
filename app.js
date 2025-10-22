@@ -189,15 +189,19 @@ function normalizeLandmarks(landmarks, forCapture = false) {
         return { vector, weights };
     }
 
-    // INFERENCIA: Usar solo las zonas activas
-    const activeIndices = new Set();
+    // INFERENCIA: Generar vector completo pero con pesos según zonas activas
     const indexWeights = new Map();
+    
+    // Inicializar todos los índices con peso 0
+    for (let i = 0; i < landmarks.length; i++) {
+        indexWeights.set(i, 0.0);
+    }
 
+    // Asignar pesos a las zonas activas
     for (const [zone, isActive] of Object.entries(state.activeZones)) {
         if (isActive && CONFIG.FACIAL_ZONES[zone]) {
             const weight = state.zoneWeights[zone];
             for (const idx of CONFIG.FACIAL_ZONES[zone]) {
-                activeIndices.add(idx);
                 if (!indexWeights.has(idx) || indexWeights.get(idx) < weight) {
                     indexWeights.set(idx, weight);
                 }
@@ -205,27 +209,16 @@ function normalizeLandmarks(landmarks, forCapture = false) {
         }
     }
 
-    if (activeIndices.size === 0) {
-        const vector = [], weights = [];
-        for (let i = 0; i < landmarks.length; i++) {
-            const x = (landmarks[i].x - centerX) / ipd;
-            const y = (landmarks[i].y - centerY) / ipd;
-            vector.push(x, y);
-            weights.push(1.0, 1.0);
-        }
-        return { vector, weights };
-    }
-
+    // Generar vector completo con todos los landmarks
     const vector = [], weights = [];
     for (let i = 0; i < landmarks.length; i++) {
-        if (activeIndices.has(i)) {
-            const x = (landmarks[i].x - centerX) / ipd;
-            const y = (landmarks[i].y - centerY) / ipd;
-            const weight = indexWeights.get(i);
-            vector.push(x, y);
-            weights.push(weight, weight);
-        }
+        const x = (landmarks[i].x - centerX) / ipd;
+        const y = (landmarks[i].y - centerY) / ipd;
+        const weight = indexWeights.get(i);
+        vector.push(x, y);
+        weights.push(weight, weight);
     }
+    
     return { vector, weights };
 }
 

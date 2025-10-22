@@ -938,78 +938,126 @@ body.mode-inference .mode-inference-only {
 
 /* Responsive Design */
 
-/* Ajuste para 1366x768 - Optimización principal */
+/* ===== OPTIMIZACIÓN ESPECIAL PARA 1366x768 AL 75% (≈1024px efectivo) ===== */
 @media (max-width: 1440px) {
+    /* Reducir padding general */
     body {
-        padding: 8px;
+        padding: 6px;
     }
     
-    .main-content {
-        max-height: calc(100vh - 100px);
-        gap: 10px;
-        padding: 10px;
+    .container {
+        border-radius: var(--radius-lg);
     }
     
+    /* Header más compacto */
     header {
-        padding: 10px 16px;
+        padding: 8px 14px;
     }
     
     header h1 {
-        font-size: 18px;
+        font-size: 16px;
+        letter-spacing: -0.3px;
     }
     
     .mode-btn {
-        font-size: 11px;
-        padding: 6px 12px;
+        font-size: 10px;
+        padding: 6px 10px;
     }
     
+    /* Área principal más compacta */
+    .main-content {
+        max-height: calc(100vh - 85px);
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    /* Paneles más compactos */
     .panel {
-        padding: 10px;
+        padding: 8px 10px;
+        margin-bottom: 0;
     }
     
     .panel h2 {
-        font-size: 13px;
-        margin-bottom: 8px;
+        font-size: 12px;
+        margin-bottom: 6px;
+        padding-bottom: 4px;
     }
     
     .panel-compact {
+        padding: 6px 8px;
+    }
+    
+    .panel-compact h2 {
+        font-size: 11px;
+        margin-bottom: 5px;
+    }
+    
+    /* Panel de predicción más compacto */
+    .panel-prediction-top {
         padding: 8px 10px;
     }
     
-    .form-group {
-        margin-bottom: 8px;
+    .panel-prediction-top h2 {
+        margin-bottom: 6px;
     }
     
-    .form-group label {
-        font-size: 11px;
+    .prediction-box {
+        padding: 8px;
+        margin-top: 6px;
+    }
+    
+    .prediction-name {
+        font-size: 14px;
         margin-bottom: 4px;
     }
     
-    .btn {
-        padding: 7px 10px;
+    .prediction-distance {
+        font-size: 10px;
+    }
+    
+    /* Formularios más compactos */
+    .form-group {
+        margin-bottom: 6px;
+    }
+    
+    .form-group label {
+        font-size: 10px;
+        margin-bottom: 3px;
+    }
+    
+    .form-group input[type="text"] {
+        padding: 6px 8px;
         font-size: 11px;
     }
     
+    /* Botones más pequeños */
+    .btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .btn-small {
+        padding: 5px 8px;
+        font-size: 10px;
+    }
+    
+    /* Textos de ayuda */
     .help-text {
         font-size: 10px;
+        margin-top: 4px;
     }
     
     .help-text-small {
         font-size: 9px;
+        margin-top: 3px;
     }
     
+    /* Video container */
     .video-container {
         border-width: 2px;
     }
     
-    .vm-label {
-        font-size: 8px;
-    }
-    
-    .vm-value {
-        font-size: 14px;
-    }
-    
+    /* Métricas de video más pequeñas */
     .video-metrics {
         top: 6px;
         right: 6px;
@@ -1017,47 +1065,145 @@ body.mode-inference .mode-inference-only {
     }
     
     .video-metric {
-        padding: 5px 8px;
-        min-width: 55px;
+        padding: 4px 8px;
+        min-width: 50px;
     }
     
-    .zones-two-column {
-        grid-template-columns: 150px 1fr;
-        gap: 10px;
+    .vm-label {
+        font-size: 7px;
+        margin-bottom: 2px;
     }
     
-    .face-diagram {
-        max-width: 150px;
+    .vm-value {
+        font-size: 13px;
     }
     
-    .weight-control {
-        padding: 5px 6px;
-        gap: 4px;
+    .video-progress {
+        font-size: 11px;
+        padding: 6px;
     }
     
-    .weight-label {
-        font-size: 10px;
-    }
-    
+    /* Configuración K-NN más compacta */
     .knn-config-grid {
-        gap: 8px;
+        gap: 6px;
+    }
+    
+    .form-group-inline {
+        padding: 5px 6px;
+        gap: 5px;
+        grid-template-columns: 25px 1fr auto;
     }
     
     .form-group-inline label {
         font-size: 10px;
     }
     
-    .form-group-inline input,
+    .form-group-inline input[type="range"] {
+        height: 4px;
+    }
+    
     .form-group-inline select {
-        font-size: 11px;
-        padding: 5px 8px;
+        font-size: 10px;
+        padding: 4px 6px;
     }
     
     .value-display {
-        font-size: 11px;
-        padding: 5px 8px;
+        font-size: 10px;
+        min-width: 22px;
+    }
+    
+    /* Zonas faciales - layout más compacto */
+    .panel-zones {
+        padding: 6px 8px;
+    }
+    
+    .zones-two-column {
+        grid-template-columns: 130px 1fr;
+        gap: 8px;
+        margin-top: 6px;
+    }
+    
+    .face-diagram-container {
+        padding: 8px;
+    }
+    
+    .face-diagram {
+        max-width: 120px;
+    }
+    
+    .zone-label {
+        font-size: 9px;
+    }
+    
+    /* Controles de peso más compactos */
+    .zone-weights {
+        gap: 4px;
+    }
+    
+    .weight-control {
+        padding: 4px 6px;
+        gap: 3px;
+    }
+    
+    .weight-label {
+        font-size: 9px;
+        margin-bottom: 2px;
+    }
+    
+    .weight-label strong {
+        font-size: 10px;
+    }
+    
+    .weight-slider {
+        height: 3px;
+    }
+    
+    .weight-slider::-webkit-slider-thumb {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .weight-slider::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Lista de estudiantes */
+    .student-list {
+        max-height: 140px;
+    }
+    
+    .student-list li {
+        padding: 6px 8px;
+        margin-bottom: 3px;
+    }
+    
+    .student-list li span {
+        font-size: 10px;
+    }
+    
+    .student-list li small {
+        font-size: 9px;
+    }
+    
+    .student-list li button {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    /* Botones en grupo */
+    .button-group {
+        gap: 6px;
+    }
+    
+    /* Privacy notice */
+    .privacy-notice {
+        padding: 10px 14px;
+        font-size: 10px;
+        margin: 12px;
     }
 }
+
 
 @media (max-width: 1200px) {
     .main-content { 

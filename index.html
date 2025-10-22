@@ -9,70 +9,58 @@
 <body>
     <div class="container">
         <header>
-            <h1>🎓 FaceMark: Reconocimiento por Landmarks Faciales</h1>
-            <div class="privacy-notice">
-                ⚠️ <strong>Privacidad garantizada:</strong> No almacenamos imágenes, solo vectores de puntos (landmarks) en tu navegador. 
-                Los datos nunca se envían a ningún servidor.
+            <div class="header-content">
+                <h1>Reconocimiento Facial por Landmarks</h1>
+                <div class="mode-selector">
+                    <button id="mode-capture" class="mode-btn active">📸 Captura/Entrenamiento</button>
+                    <button id="mode-inference" class="mode-btn">🔍 Inferencia</button>
+                </div>
             </div>
         </header>
 
         <div class="main-content">
-            <!-- Columna izquierda: Cámara y video -->
+            <!-- Columna izquierda: Cámara, métricas y log -->
             <div class="video-section">
                 <div class="video-container">
                     <video id="webcam" autoplay playsinline></video>
                     <canvas id="canvas"></canvas>
-                </div>
-                <div class="status-bar">
-                    <span id="fps-display">FPS: --</span>
-                    <span id="inference-time">Tiempo: -- ms</span>
-                    <span id="capture-progress"></span>
+                    
+                    <!-- Métricas superpuestas en el video -->
+                    <div class="video-metrics">
+                        <div class="video-metric">
+                            <span class="vm-label">FPS</span>
+                            <span class="vm-value" id="fps-display">--</span>
+                        </div>
+                        <div class="video-metric">
+                            <span class="vm-label">Tiempo</span>
+                            <span class="vm-value" id="inference-time">-- ms</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Progreso de captura superpuesto -->
+                    <div class="video-progress" id="capture-progress"></div>
                 </div>
             </div>
 
             <!-- Columna derecha: Controles -->
             <div class="controls-section">
-                <!-- Registro de alumnos -->
-                <div class="panel">
+                <!-- Registro de alumnos (solo modo captura) -->
+                <div class="panel mode-capture-only">
                     <h2>📝 Registro de Alumnos</h2>
                     <div class="form-group">
                         <label for="student-name">Nombre del alumno:</label>
                         <input type="text" id="student-name" placeholder="Ej: Juan Pérez">
                     </div>
                     <button id="btn-capture" class="btn btn-primary">
-                        📸 Capturar 3 segundos
+                        📸 Capturar 5 segundos
                     </button>
                     <p class="help-text">
-                        Captura ~45 frames de landmarks durante 3 segundos para crear el prototipo del alumno.
+                        Captura ~75 frames durante 5 segundos. Gira la cabeza y gesticula para mejorar el reconocimiento.
                     </p>
                 </div>
 
-                <!-- Configuración -->
-                <div class="panel">
-                    <h2>⚙️ Configuración k-NN</h2>
-                    <div class="form-group">
-                        <label for="k-value">Valor de k: <span id="k-display">3</span></label>
-                        <input type="range" id="k-value" min="1" max="10" value="3">
-                    </div>
-                    <div class="form-group">
-                        <label for="threshold">Umbral τ: <span id="threshold-display">3.0</span></label>
-                        <input type="range" id="threshold" min="0.5" max="8.0" step="0.1" value="3.0">
-                        <p class="help-text-small">Si la distancia mínima supera τ, predice "Desconocido"</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="distance-metric">Métrica de distancia:</label>
-                        <select id="distance-metric">
-                            <option value="euclidean" selected>Euclídea (L2)</option>
-                            <option value="cosine">Coseno (similaridad)</option>
-                        </select>
-                        <p class="help-text-small">
-                            <strong>Euclídea:</strong> Mide distancia punto a punto (mejor para geometría facial).
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Predicción -->
-                <div class="panel">
+                <!-- Predicción (solo modo inferencia) - MOVIDO ARRIBA -->
+                <div class="panel mode-inference-only panel-prediction-top">
                     <h2>🔍 Predicción en Vivo</h2>
                     <button id="btn-predict" class="btn btn-secondary">
                         ▶️ Iniciar Predicción
@@ -83,14 +71,99 @@
                     </div>
                 </div>
 
-                <!-- Lista de alumnos -->
-                <div class="panel">
+                <!-- Configuración (solo modo inferencia) -->
+                <div class="panel mode-inference-only panel-compact">
+                    <h2>⚙️ k-NN</h2>
+                    <div class="knn-config-grid">
+                        <div class="form-group-inline">
+                            <label for="k-value">k</label>
+                            <input type="range" id="k-value" min="1" max="10" value="3">
+                            <span id="k-display" class="value-display">3</span>
+                        </div>
+                        <div class="form-group-inline">
+                            <label for="threshold">τ</label>
+                            <input type="range" id="threshold" min="0.5" max="8.0" step="0.1" value="3.0">
+                            <span id="threshold-display" class="value-display">3.0</span>
+                        </div>
+                        <div class="form-group-inline form-group-full">
+                            <label for="distance-metric">Métrica</label>
+                            <select id="distance-metric">
+                                <option value="euclidean" selected>Euclídea</option>
+                                <option value="cosine">Coseno</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selección de zonas faciales (solo modo inferencia) -->
+                <div class="panel panel-zones mode-inference-only panel-compact">
+                    <h2>🎯 Zonas Activas</h2>
+                    
+                    <!-- Contenedor en dos columnas -->
+                    <div class="zones-two-column">
+                        <!-- Columna 1: Diagrama facial interactivo -->
+                        <div class="face-diagram-container">
+                            <svg viewBox="0 0 200 240" class="face-diagram">
+                            <!-- Contorno -->
+                            <ellipse cx="100" cy="120" rx="70" ry="90" class="face-zone zone-contour" data-zone="contour" />
+                            
+                            <!-- Cejas -->
+                            <path d="M 60 85 Q 75 80 90 85" class="face-zone zone-eyebrows" data-zone="eyebrows" stroke-width="6" fill="none" />
+                            <path d="M 110 85 Q 125 80 140 85" class="face-zone zone-eyebrows" data-zone="eyebrows" stroke-width="6" fill="none" />
+                            
+                            <!-- Ojos -->
+                            <ellipse cx="75" cy="100" rx="15" ry="10" class="face-zone zone-eyes" data-zone="eyes" />
+                            <ellipse cx="125" cy="100" rx="15" ry="10" class="face-zone zone-eyes" data-zone="eyes" />
+                            
+                            <!-- Nariz -->
+                            <path d="M 100 110 L 95 135 L 100 138 L 105 135 Z" class="face-zone zone-nose" data-zone="nose" />
+                            
+                            <!-- Boca -->
+                            <ellipse cx="100" cy="165" rx="25" ry="15" class="face-zone zone-mouth" data-zone="mouth" />
+                            
+                            <!-- Etiquetas -->
+                            <text x="100" y="230" class="zone-label" text-anchor="middle">Clic para activar/desactivar</text>
+                        </svg>
+                        </div>
+
+                        <!-- Columna 2: Controles de peso -->
+                        <div class="zone-weights">
+                            <div class="weight-control" data-zone="eyes">
+                            <span class="weight-label">👁️ Ojos: <strong id="weight-eyes">2.0</strong></span>
+                            <input type="range" class="weight-slider" data-zone="eyes" min="0.5" max="3.0" step="0.1" value="2.0">
+                        </div>
+                        <div class="weight-control" data-zone="nose">
+                            <span class="weight-label">👃 Nariz: <strong id="weight-nose">1.5</strong></span>
+                            <input type="range" class="weight-slider" data-zone="nose" min="0.5" max="3.0" step="0.1" value="1.5">
+                        </div>
+                        <div class="weight-control" data-zone="mouth">
+                            <span class="weight-label">👄 Boca: <strong id="weight-mouth">1.0</strong></span>
+                            <input type="range" class="weight-slider" data-zone="mouth" min="0.5" max="3.0" step="0.1" value="1.0">
+                        </div>
+                        <div class="weight-control" data-zone="eyebrows">
+                            <span class="weight-label">🤨 Cejas: <strong id="weight-eyebrows">1.2</strong></span>
+                            <input type="range" class="weight-slider" data-zone="eyebrows" min="0.5" max="3.0" step="0.1" value="1.2">
+                        </div>
+                            <div class="weight-control" data-zone="contour">
+                                <span class="weight-label">⭕ Contorno: <strong id="weight-contour">0.8</strong></span>
+                                <input type="range" class="weight-slider" data-zone="contour" min="0.5" max="3.0" step="0.1" value="0.8">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-reset-zones" class="btn btn-small btn-block">
+                        🔄 Restaurar por defecto
+                    </button>
+                </div>
+
+                <!-- Lista de alumnos (solo modo captura) -->
+                <div class="panel mode-capture-only">
                     <h2>👥 Alumnos Registrados (<span id="student-count">0</span>)</h2>
                     <ul id="student-list" class="student-list"></ul>
                 </div>
 
-                <!-- Gestión de datos -->
-                <div class="panel">
+                <!-- Gestión de datos (solo modo captura) -->
+                <div class="panel mode-capture-only">
                     <h2>💾 Gestión de Datos</h2>
                     <div class="button-group">
                         <button id="btn-export" class="btn btn-small">📤 Exportar JSON</button>
@@ -98,12 +171,6 @@
                         <input type="file" id="file-import" accept=".json" style="display: none;">
                         <button id="btn-clear" class="btn btn-small btn-danger">🗑️ Borrar Todo</button>
                     </div>
-                </div>
-
-                <!-- Log de eventos -->
-                <div class="panel">
-                    <h2>📋 Log de Eventos</h2>
-                    <div id="event-log" class="event-log"></div>
                 </div>
             </div>
         </div>
